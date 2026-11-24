@@ -1,13 +1,12 @@
-
 import { test, expect } from '@playwright/test';
 
 // The with-bugs site uses hash routing, so every route starts with /#/
 const BASE_URL = 'https://with-bugs.practicesoftwaretesting.com/#/';
 
-// This site is slow (the title test alone took ~5s, the default limit).
-// This only raises how long a retrying expect may keep trying. It is not a
-// fixed wait: each check still passes the moment its condition is true.
-expect.configure({ timeout: 15_000 });
+// No limit of its own on retrying: every expect keeps retrying until its
+// condition is true. (Playwright's overall per-test limit still applies, so a
+// check that can never pass ends the test instead of hanging forever.)
+expect.configure({ timeout: 0 });
 
 test.describe('Toolshop UI (with-bugs)', () => {
   test('home page has the expected title', async ({ page }) => {
@@ -29,16 +28,14 @@ test.describe('Toolshop UI (with-bugs)', () => {
     await searchBox.fill('pliers');
     await searchButton.click();
 
-    // Wait until the search has really finished. The caption and the
-    // "N products found" text appear immediately (with the OLD results),
-    // so wait for the results container the app marks as completed.
+    // The page shows the OLD product list until the response arrives, so wait
+    // for the results container the app marks as completed.
     await expect(page.getByRole('heading', { name: /Searched for: pliers/i })).toBeVisible();
-    // toBeAttached (not toBeVisible): if the search returns nothing, this
-    // container is empty and therefore "hidden", but it is still on the page.
     await expect(page.locator('[data-test="search_completed"]')).toBeAttached();
 
     // Product names are h5 headings inside the product cards (links).
     const productNames = page.getByRole('link').getByRole('heading', { level: 5 });
+
     // Retrying check: waits for results to render, and fails with a clear
     // message if the search returns nothing.
     await expect(productNames, 'search for "pliers" should return at least one product').not.toHaveCount(0);
