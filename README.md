@@ -69,3 +69,48 @@ Run these steps in order from a terminal.
 
 - `npm run check`: checks your `.env` and that you can reach the Toolshop API.
 - `npm test`: runs the Playwright tests in `tests/`.
+
+# Week 2 Day 7 – Toolshop UI Testing
+
+## Project Overview
+This project contains three automated UI tests written using Playwright and TypeScript against the Practice Software Testing Toolshop application.
+
+## Application Under Test
+https://with-bugs.practicesoftwaretesting.com/
+
+## Test Scenarios
+
+| # | Test Scenario | Expected Result |
+|---|---|---|
+| 1 | Verify homepage title | Homepage displays the expected title |
+| 2 | Search for pliers | All returned products contain "pliers" in their names |
+| 3 | Invalid login | Login is rejected with the message "Invalid email or password" |
+
+## Tools and Technologies
+- Playwright
+- TypeScript
+- Node.js
+- Git and GitHub
+
+## Running the Tests
+
+Run all tests:
+
+```bash
+npx playwright test tests/toolshop.spec.ts
+```
+
+Run tests with the browser visible:
+
+```bash
+npx playwright test tests/toolshop.spec.ts --headed
+```
+
+View the HTML report:
+
+```bash
+npx playwright show-report
+```
+
+## Test Results
+All three UI test scenarios passed in the latest test run.
