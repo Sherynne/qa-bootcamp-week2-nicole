@@ -4,6 +4,11 @@ import { test, expect } from '@playwright/test';
 // The with-bugs site uses hash routing, so every route starts with /#/
 const BASE_URL = 'https://with-bugs.practicesoftwaretesting.com/#/';
 
+// This site is slow (the title test alone took ~5s, the default limit).
+// This only raises how long a retrying expect may keep trying. It is not a
+// fixed wait: each check still passes the moment its condition is true.
+expect.configure({ timeout: 15_000 });
+
 test.describe('Toolshop UI (with-bugs)', () => {
   test('home page has the expected title', async ({ page }) => {
     await page.goto(BASE_URL);
