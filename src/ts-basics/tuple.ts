@@ -1,2 +1,2 @@
 
-let User:[Number,string] =[1,'Mosh'] 
+let User: [number, string] = [1, 'Mosh'];
